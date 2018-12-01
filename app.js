@@ -18,7 +18,8 @@ app.use(express.static(path.join(__dirname, 'public/')));
 app.set('view engine', pug);
 
 app.get('/',(req, res) => {
-    res.render('index.pug');
+    // res.render('index.pug');
+    res.send('Welcome to donator');
 });
 
 app.listen(port, () => {
