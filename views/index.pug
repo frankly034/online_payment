@@ -1,0 +1,23 @@
+extends layout
+block content
+    main
+        .row.justify-content-center
+            .col-lg-6.container3.text-white.p-5
+                .container4
+                    h3.text-center
+                        | One 
+                        span.spn $1
+                        | can Save a life.
+                .container.pt-3
+                    form(name='myForm', action='/pay', method='POST')
+                        input#name(type='text', name='fname', placeholder='Fullname')
+                        hr
+                        input#email(type='email', name='fname', placeholder='Email')
+                        hr
+                        select
+                            option Select Amount
+                            option $20
+                            option $30
+                            option $40
+                    .bttn.pt-2
+                        button DONATE
