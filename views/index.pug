@@ -6,18 +6,18 @@ block content
                 .container4
                     h3.text-center
                         | One 
-                        span.spn $1
+                        span.spn $1 
                         | can Save a life.
                 .container.pt-3
-                    form(name='myForm', action='/pay', method='POST')
-                        input#name(type='text', name='fname', placeholder='Fullname')
+                    form(name='myForm', action='/paystack/pay', method='POST')
+                        input#name(type='text', name='full_name', placeholder='Full Nname')
                         hr
-                        input#email(type='email', name='fname', placeholder='Email')
+                        input#email(type='email', name='email', placeholder='Email')
                         hr
-                        select
+                        select(name='amount')
                             option Select Amount
-                            option $20
-                            option $30
-                            option $40
-                    .bttn.pt-2
-                        button DONATE
+                            option(value='500') 500
+                            option(value='1000') 1000
+                            option(value='2000') 2000
+                        .bttn.pt-2
+                            button(type='submit') DONATE
