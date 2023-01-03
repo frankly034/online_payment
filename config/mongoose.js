@@ -1,5 +1,7 @@
-const mongoose = require ('mongoose');
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", false);
+mongoose
+  .connect(process.env.DB_STRING)
+  .catch((e) => console.log(`Error connecting to db: ${e}`));
 
-mongoose.connect('mongodb://localhost:27017/online_payment',{useNewUrlParser:true});
-
-module.exports = {mongoose}
+module.exports = { mongoose };
