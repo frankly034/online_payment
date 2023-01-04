@@ -1,18 +1,23 @@
-const express = require("express");
-const request = require("request");
-const bodyParser = require("body-parser");
-const pug = require("pug");
-const _ = require("lodash");
-const path = require("path");
-require("dotenv").config();
+import express from "express";
+import request from "request";
+import bodyParser from "body-parser";
+import pug from "pug";
+import _ from "lodash";
+import dotenv from "dotenv";
+import path from "path";
 
-const { Donor } = require("./models/donor");
-const { initializePayment, verifyPayment } =
-  require("./config/paystack")(request);
+dotenv.config();
+
+import { Donor } from "./models/donor.js";
+import { paystack } from "./config/paystack.js";
+import { currDir } from "./utils/index.js";
+
+const { initializePayment, verifyPayment } = paystack(request);
 
 const port = process.env.PORT || 3000;
 
 const app = express();
+const __dirname = currDir(import.meta.url);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -24,9 +29,9 @@ app.get("/", (req, res) => {
 });
 
 app.post("/paystack/pay", (req, res) => {
-  const form = _.pick(req.body, ["amount", "email", "full_name"]);
+  const form = _.pick(req.body, ["amount", "email", "fullName"]);
   form.metadata = {
-    full_name: form.full_name,
+    fullName: form.fullName,
   };
   form.amount *= 100;
 
@@ -34,7 +39,7 @@ app.post("/paystack/pay", (req, res) => {
     if (error) {
       return res.redirect("/error");
     }
-    response = JSON.parse(body);
+    const response = JSON.parse(body);
     res.redirect(response.data.authorization_url);
   });
 });
@@ -45,18 +50,18 @@ app.get("/paystack/callback", (req, res) => {
     if (error) {
       return res.redirect("/error");
     }
-    response = JSON.parse(body);
+    const response = JSON.parse(body);
 
     const data = _.at(response.data, [
       "reference",
       "amount",
       "customer.email",
-      "metadata.full_name",
+      "metadata.fullName",
     ]);
 
-    [reference, amount, email, full_name] = data;
+    const [reference, amount, email, fullName] = data;
 
-    const donor = new Donor({ reference, amount, email, full_name });
+    const donor = new Donor({ reference, amount, email, fullName });
 
     donor
       .save()
