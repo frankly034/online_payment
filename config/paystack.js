@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 const paystack = (request) => {
   const headers = {
     authorization: `Bearer ${process.env.PAYSTACK_SECRET}`,
@@ -33,4 +36,4 @@ const paystack = (request) => {
   return { initializePayment, verifyPayment };
 };
 
-module.exports = paystack;
+export { paystack };
