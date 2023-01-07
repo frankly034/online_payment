@@ -5,24 +5,26 @@ import pug from "pug";
 import _ from "lodash";
 import dotenv from "dotenv";
 import path from "path";
-
-dotenv.config();
+import logger from "morgan";
 
 import { Donor } from "./models/donor.js";
 import { paystack } from "./config/paystack.js";
 import { currDir } from "./utils/index.js";
 
+dotenv.config();
+
 const { initializePayment, verifyPayment } = paystack(request);
+const __dirname = currDir(import.meta.url);
 
 const port = process.env.PORT || 3000;
 
 const app = express();
-const __dirname = currDir(import.meta.url);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public/")));
 app.set("view engine", pug);
+app.use(logger("combined"));
 
 app.get("/", (req, res) => {
   res.render("index.pug");
